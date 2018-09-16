@@ -1,0 +1,6 @@
+h1 GifToFlip
+
+= form_tag "/create_flip", multipart: true do
+  = label_tag(:moving_file, "Upload your file:")
+  = file_field_tag(:moving_file)
+  = submit_tag("Send")
