@@ -13,7 +13,7 @@ gem 'webpacker'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem "slim-rails"
-gem 'rubyzip'
+gem 'rubyzip', '1.2.2'
 
 gem 'bootsnap', '>= 1.1.0', require: false
 
