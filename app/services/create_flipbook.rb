@@ -1,4 +1,5 @@
 require 'zip'
+require 'fileutils'
 
 class CreateFlipbook
   attr_accessor :zip_path
@@ -37,24 +38,18 @@ class CreateFlipbook
   end
 
   def extract_frames
-    stdout, stderr, status = Open3.capture3("convert #{convert_options}")
-    puts '===='
-    puts stdout
-    puts stderr
-    puts status
-    puts folder_path
-    puts '===='
+    Open3.capture3("convert #{convert_options}")
+    files_to_delete = Dir.glob(folder_path.join('**', 'extracted-*.png')).select do |f|
+      match = f.match(/(\d+).png$/)
+      match && match[1].to_i.odd?
+    end
+    FileUtils.rm files_to_delete
   end
 
   def merge_frames
-    count_files = Dir[File.join(folder_path, '**', '*')].count { |file| File.file?(file) } - 1
+    count_files = (Dir[File.join(folder_path, '**', '*')].count { |file| File.file?(file) } - 1) * 2
     frames_array(count_files).each_with_index do |frames, i|
-      stdout, stderr, status = Open3.capture3("montage #{montage_options(frames, i)}")
-      puts '===='
-      puts stdout
-      puts stderr
-      puts status
-      puts '===='
+      Open3.capture3("montage #{montage_options(frames, i)}")
     end
   end
 
@@ -68,7 +63,7 @@ class CreateFlipbook
   end
 
   def frames_array(count)
-    (0...count).to_a.each_slice(8).to_a
+    (0...count).step(2).to_a.each_slice(8).to_a
   end
 
   def convert_options
