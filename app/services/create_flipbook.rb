@@ -59,12 +59,11 @@ class CreateFlipbook
   end
 
   def create_zip
-    self.zip_path = folder_path.join("giftoflip.zip")
+    self.zip_path = folder_path.join('giftoflip.zip')
     Zip::File.open(zip_path, Zip::File::CREATE) do |zipfile|
-      Dir.glob(folder_path.join('**', "fullframe*")).sort.each_with_index do |filename, i|
+      Dir.glob(folder_path.join('**', 'fullframe*')).sort.each_with_index do |filename, i|
         zipfile.add("#{i}.png", File.join(filename))
       end
-      # zipfile.get_output_stream("myFile") { |f| f.write "myFile contains just this" }
     end
   end
 
